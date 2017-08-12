@@ -13,13 +13,15 @@ call :firewalladd "C:\Program Files (x86)\Synergy\synergyc.exe" "Synergy Client"
 call :firewalladd "C:\Program Files (x86)\Synergy\synergys.exe" "Synergy Server"
 
 call :firewalladd "C:\Program Files\Far Manager\Far.exe" "Far Manager"
+call :firewalladd "C:\Program Files\OpenVPN\bin\openvpn.exe" "openvpn"
+call :firewalladd "C:\Program Files\OpenVPN\bin\openvpnserv.exe" "openvpnserv"
 
 call :firewalladd "C:\Users\user\AppData\Local\Atlassian\SourceTree\git_local\cmd\git.exe"
 call :firewalladd "C:\Users\user\AppData\Local\Atlassian\SourceTree\git_local\mingw32\libexec\git-core\git-remote-https.exe"
 call :firewalladd "C:\Users\user\AppData\Local\SourceTree\app-2.0.20.1\SourceTree.exe"
 
-call :firewalladd "C:\usr\bin\curl.exe"
-call :firewalladd "C:\usr\bin\wget.exe"
+call :firewalladd "C:\usr\bin\curl.exe" 
+call :firewalladd "C:\usr\bin\wget.exe" 
 call :firewalladd "C:\usr\BTSync\BTSync.exe"
 call :firewalladd "C:\usr\putty\plink.exe"
 call :firewalladd "C:\usr\putty\pscp.exe"
@@ -48,21 +50,28 @@ IF DEFINED name (
     echo Creating rule named %2 in IN chain
     netsh advfirewall firewall add rule name=%2 dir=in  action=allow program=%1 enable=yes profile=any
 ) ELSE (
-    echo Deleting rule named %1 from all chains
+    echo Deleting rule named %~n1 from all chains
     netsh advfirewall firewall delete rule name=%1
-    echo Creating rule named %1 in OUT chain
-    netsh advfirewall firewall add rule name=%1 dir=out action=allow program=%1 enable=yes profile=any
-    echo Creating rule named %1 in IN chain
-    netsh advfirewall firewall add rule name=%1 dir=in  action=allow program=%1 enable=yes profile=any
+    echo Creating rule named %~n1 in OUT chain
+    netsh advfirewall firewall add rule name=%~n1 dir=out action=allow program=%1 enable=yes profile=any
+    echo Creating rule named %~n1 in IN chain
+    netsh advfirewall firewall add rule name=%~n1 dir=in  action=allow program=%1 enable=yes profile=any
 )
 set name=
 goto :eof
 :firewalladdend
 
+netsh advfirewall firewall delete rule name="Lockalnet"
 netsh advfirewall firewall add rule name="Lockalnet" dir=in action=allow profile=any remoteip=localsubnet
 netsh advfirewall firewall add rule name="Lockalnet" dir=out action=allow profile=any remoteip=localsubnet
+
+netsh advfirewall firewall delete rule name="KMS"
 netsh advfirewall firewall add rule name="KMS" dir=out action=allow  protocol=TCP remoteport=1688 enable=yes profile=any
+
+netsh advfirewall firewall delete rule name="WindowsUpdate"
 netsh advfirewall firewall add rule name="WindowsUpdate" dir=out action=allow service=wuauserv enable=yes profile=any
+
+netsh advfirewall firewall delete rule name="BITS"
 netsh advfirewall firewall add rule name="BITS" dir=out action=allow service=BITS enable=yes profile=any
   
 

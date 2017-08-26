@@ -52,7 +52,7 @@ IF DEFINED name (
     netsh advfirewall firewall add rule name=%2 dir=in  action=allow program=%1 enable=yes profile=any
 ) ELSE (
     echo Deleting rule named %~n1 from all chains
-    netsh advfirewall firewall delete rule name=%1
+    netsh advfirewall firewall delete rule name=%~n1
     echo Creating rule named %~n1 in OUT chain
     netsh advfirewall firewall add rule name=%~n1 dir=out action=allow program=%1 enable=yes profile=any
     echo Creating rule named %~n1 in IN chain

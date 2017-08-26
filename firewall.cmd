@@ -8,6 +8,7 @@ rem netsh advfirewall set allprofiles firewallpolicy blockinbound,allowoutbound
 
 call :firewalladd "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "Mozilla Firefox"
 call :firewalladd "C:\Program Files (x86)\Remote Manipulator System - Host\rutserv.exe" "RMS - Host"
+call :firewalladd "C:\Program Files (x86)\Remote Manipulator System - Viewer\rutview.exe" "RMS - Client"
 call :firewalladd "C:\Program Files (x86)\rms\rutview.exe" "RMS - View"
 call :firewalladd "C:\Program Files (x86)\Synergy\synergyc.exe" "Synergy Client"
 call :firewalladd "C:\Program Files (x86)\Synergy\synergys.exe" "Synergy Server"
